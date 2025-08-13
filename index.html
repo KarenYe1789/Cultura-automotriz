@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test de Cultura Automotriz</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a1a 25%, #2d2d2d 50%, #1a1a1a 75%, #0c0c0c 100%);
+            min-height: 100vh;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        .racing-stripes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 8px;
+            background: linear-gradient(90deg, #ff0040 0%, #ff6600 25%, #ffcc00 50%, #ff6600 75%, #ff0040 100%);
+            animation: stripeMove 3s linear infinite;
+            z-index: 1000;
+        }
+
+        @keyframes stripeMove {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: linear-gradient(135deg, #ff0040, #ff6600);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(255, 0, 64, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            animation: shine 4s ease-in-out infinite;
+        }
+
+        @keyframes shine {
+            0%, 100% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            50% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        h1 {
+            font-size: 3em;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.8);
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+            position: relative;
+            z-index: 2;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 12px;
+            background: #333;
+            border-radius: 6px;
+            margin: 30px 0;
+            overflow: hidden;
+            box-shadow: inset 0 3px 6px rgba(0,0,0,0.3);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ff0040, #ff6600, #ffcc00);
+            width: 0%;
+            transition: width 0.5s ease;
+            position: relative;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            animation: progressShine 2s ease-in-out infinite;
+        }
+
+        @keyframes progressShine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .question-card {
+            background: linear-gradient(135deg, #2d2d2d, #1a1a1a);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.5);
+            border: 2px solid transparent;
+            background-clip: padding-box;
+            position: relative;
+            overflow: hidden;
+            transform: scale(0.95);
+            opacity: 0;
+            animation: cardAppear 0.6s ease forwards;
+        }
+
+        @keyframes cardAppear {
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .question-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #ff0040, #ff6600, #ffcc00);
+            margin: -2px;
+            border-radius: 15px;
+            z-index: -1;
+        }
+
+        .question-number {
+            color: #ff6600;
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .question-text {
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-bottom: 25px;
+            line-height: 1.4;
+        }
+
+        .answers {
+            display: grid;
+            gap: 15px;
+        }
+
+        .answer-option {
+            background: linear-gradient(135deg, #333, #1a1a1a);
+            border: 2px solid #444;
+            padding: 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .answer-option:hover {
+            border-color: #ff6600;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(255, 102, 0, 0.3);
+        }
+
+        .answer-option:active {
+            transform: translateY(-1px);
+        }
+
+        .answer-option.selected {
+            border-color: #ff0040;
+            background: linear-gradient(135deg, #ff0040, #cc0033);
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(255, 0, 64, 0.3); }
+            50% { box-shadow: 0 0 30px rgba(255, 0, 64, 0.6); }
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #ff0040, #ff6600);
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            font-size: 1.2em;
+            font-weight: bold;
+            border-radius: 12px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin: 30px auto;
+            display: block;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 25px rgba(255, 0, 64, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(255, 0, 64, 0.6);
+        }
+
+        .btn:active {
+            transform: translateY(-1px);
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .result-card {
+            background: linear-gradient(135deg, #2d2d2d, #1a1a1a);
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.6);
+            position: relative;
+            overflow: hidden;
+            animation: resultAppear 1s ease forwards;
+        }
+
+        @keyframes resultAppear {
+            from {
+                transform: scale(0.8) rotateY(90deg);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1) rotateY(0deg);
+                opacity: 1;
+            }
+        }
+
+        .score-display {
+            font-size: 4em;
+            font-weight: bold;
+            margin: 20px 0;
+            background: linear-gradient(90deg, #ff0040, #ff6600, #ffcc00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .level-title {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin: 20px 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .level-description {
+            font-size: 1.3em;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        .restart-btn {
+            background: linear-gradient(135deg, #00ff88, #00cc6a);
+            margin-top: 20px;
+        }
+
+        .restart-btn:hover {
+            box-shadow: 0 15px 35px rgba(0, 255, 136, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 2.2em;
+            }
+            
+            .question-text {
+                font-size: 1.2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="racing-stripes"></div>
+    
+    <div class="container">
+        <div class="header">
+            <h1>🏁 Test de Cultura Automotriz 🏁</h1>
+            <p class="subtitle">Descubre tu nivel de conocimiento sobre las marcas más competitivas</p>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+
+        <div id="quizContainer">
+            <!-- Las preguntas se cargarán aquí -->
+        </div>
+
+        <div id="resultContainer" style="display: none;">
+            <!-- Los resultados se mostrarán aquí -->
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "¿Cuál es el modelo insignia deportivo de Subaru conocido por dominar el rally?",
+                answers: [
+                    { text: "Legacy STI", points: 1 },
+                    { text: "WRX STI", points: 3 },
+                    { text: "Forester XT", points: 1 },
+                    { text: "BRZ Turbo", points: 0 }
+                ]
+            },
+            {
+                question: "El Porsche 911 es famoso por tener su motor ubicado en:",
+                answers: [
+                    { text: "Posición frontal", points: 0 },
+                    { text: "Posición central", points: 1 },
+                    { text: "Posición trasera", points: 3 },
+                    { text: "Ambas posiciones", points: 0 }
+                ]
+            },
+            {
+                question: "¿Cuál es la máxima expresión deportiva de BMW Serie 3?",
+                answers: [
+                    { text: "BMW 330i", points: 1 },
+                    { text: "BMW M3", points: 3 },
+                    { text: "BMW 335i", points: 2 },
+                    { text: "BMW 340i", points: 1 }
+                ]
+            },
+            {
+                question: "¿Qué vehículo compite directamente con el BMW M3 y Mercedes-AMG C63?",
+                answers: [
+                    { text: "Jaguar XE SVR", points: 3 },
+                    { text: "Jaguar F-Type", points: 2 },
+                    { text: "Jaguar I-PACE", points: 1 },
+                    { text: "Jaguar XF", points: 1 }
+                ]
+            },
+            {
+                question: "El CUPRA Leon compite directamente contra:",
+                answers: [
+                    { text: "BMW M5 y Mercedes-AMG E63", points: 0 },
+                    { text: "Mercedes-AMG A45 y BMW M135i", points: 3 },
+                    { text: "Porsche 911 y BMW M4", points: 1 },
+                    { text: "Jaguar F-Type y Porsche Boxster", points: 0 }
+                ]
+            },
+            {
+                question: "¿Cuál es el sistema de tracción integral exclusivo de Mercedes-Benz?",
+                answers: [
+                    { text: "Quattro", points: 1 },
+                    { text: "4MATIC", points: 3 },
+                    { text: "xDrive", points: 2 },
+                    { text: "Symmetrical AWD", points: 1 }
+                ]
+            },
+            {
+                question: "El BMW M5 y Mercedes-AMG E63 son conocidos como:",
+                answers: [
+                    { text: "Hot Hatch supremos", points: 0 },
+                    { text: "Super sedanes familiares", points: 3 },
+                    { text: "Roadsters de lujo", points: 1 },
+                    { text: "SUV deportivos", points: 0 }
+                ]
+            },
+            {
+                question: "¿Qué motor caracteriza al Subaru WRX STI?",
+                answers: [
+                    { text: "V6 biturbo", points: 1 },
+                    { text: "Boxer 4 cilindros turboalimentado", points: 3 },
+                    { text: "V8 atmosférico", points: 0 },
+                    { text: "L4 turbo convencional", points: 2 }
+                ]
+            },
+            {
+                question: "¿Cuál es el rival directo del Porsche 718 Boxster?",
+                answers: [
+                    { text: "BMW Z4", points: 3 },
+                    { text: "Mercedes-AMG GT", points: 2 },
+                    { text: "BMW M2", points: 1 },
+                    { text: "CUPRA Formentor", points: 0 }
+                ]
+            },
+            {
+                question: "El Mercedes-AMG GT compite principalmente contra:",
+                answers: [
+                    { text: "BMW M3 y M4", points: 2 },
+                    { text: "Porsche 911", points: 3 },
+                    { text: "Subaru WRX STI", points: 0 },
+                    { text: "CUPRA Leon", points: 0 }
+                ]
+            },
+            {
+                question: "¿Qué característica comparten el BMW M2 y el Porsche 718 Cayman?",
+                answers: [
+                    { text: "Motor trasero", points: 1 },
+                    { text: "Tracción integral", points: 0 },
+                    { text: "Son coupés deportivos compactos", points: 3 },
+                    { text: "Motor boxer", points: 1 }
+                ]
+            },
+            {
+                question: "El Jaguar F-Type R compite en el segmento de:",
+                answers: [
+                    { text: "Hot hatch premium", points: 0 },
+                    { text: "Sedanes deportivos", points: 1 },
+                    { text: "Roadsters y coupés deportivos de lujo", points: 3 },
+                    { text: "SUV deportivos", points: 0 }
+                ]
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let answers = [];
+
+        function displayQuestion() {
+            const container = document.getElementById('quizContainer');
+            const question = questions[currentQuestion];
+            
+            container.innerHTML = `
+                <div class="question-card">
+                    <div class="question-number">Pregunta ${currentQuestion + 1} de ${questions.length}</div>
+                    <div class="question-text">${question.question}</div>
+                    <div class="answers" id="answers">
+                        ${question.answers.map((answer, index) => `
+                            <div class="answer-option" onclick="selectAnswer(${index})" data-index="${index}">
+                                ${answer.text}
+                            </div>
+                        `).join('')}
+                    </div>
+                    <button class="btn" onclick="nextQuestion()" id="nextBtn" style="display: none;">
+                        ${currentQuestion < questions.length - 1 ? 'Siguiente' : 'Ver Resultado'}
+                    </button>
+                </div>
+            `;
+            
+            updateProgress();
+        }
+
+        function selectAnswer(index) {
+            const options = document.querySelectorAll('.answer-option');
+            options.forEach(option => option.classList.remove('selected'));
+            
+            const selectedOption = options[index];
+            selectedOption.classList.add('selected');
+            
+            answers[currentQuestion] = index;
+            
+            document.getElementById('nextBtn').style.display = 'block';
+        }
+
+        function nextQuestion() {
+            if (answers[currentQuestion] !== undefined) {
+                score += questions[currentQuestion].answers[answers[currentQuestion]].points;
+                currentQuestion++;
+                
+                if (currentQuestion < questions.length) {
+                    displayQuestion();
+                } else {
+                    showResult();
+                }
+            }
+        }
+
+        function updateProgress() {
+            const progress = (currentQuestion / questions.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        function showResult() {
+            document.getElementById('quizContainer').style.display = 'none';
+            document.getElementById('progressFill').style.width = '100%';
+            
+            let level, title, description, color;
+            
+            if (score >= 32) {
+                level = "LEYENDA AUTOMOTRIZ";
+                title = "🏆 MÁXIMO NIVEL 🏆";
+                description = "¡INCREÍBLE! Eres un verdadero experto en cultura automotriz. Conoces a la perfección la historia, características y competencias entre las marcas más prestigiosas. Tu pasión por los autos es evidente y tu conocimiento rivaliza con el de los ingenieros de estas marcas.";
+                color = "linear-gradient(135deg, #ffd700, #ffed4e)";
+            } else if (score >= 26) {
+                level = "EXPERTO RACING";
+                title = "🏁 NIVEL EXPERTO 🏁";
+                description = "¡EXCELENTE! Tienes un conocimiento muy sólido sobre las marcas automotrices deportivas. Conoces bien la historia y características de cada marca. Definitivamente eres un entusiasta que aprecia la ingeniería y el rendimiento automotriz.";
+                color = "linear-gradient(135deg, #ff6600, #ff8533)";
+            } else if (score >= 20) {
+                level = "ENTHUSIAST";
+                title = "🚗 NIVEL ENTHUSIAST 🚗";
+                description = "¡MUY BIEN! Tienes un buen conocimiento general sobre las marcas automotrices. Conoces algunos aspectos importantes de la historia y características de estas marcas. Sigues aprendiendo y desarrollando tu pasión automotriz.";
+                color = "linear-gradient(135deg, #ff0040, #ff3366)";
+            } else if (score >= 14) {
+                level = "AFICIONADO";
+                title = "🔧 NIVEL AFICIONADO 🔧";
+                description = "¡BIEN! Tienes conocimientos básicos sobre las marcas automotrices. Hay algunas cosas que sabes bien, pero hay espacio para aprender más sobre la rica historia y características de estas marcas legendarias.";
+                color = "linear-gradient(135deg, #00ff88, #33ff99)";
+            } else {
+                level = "ROOKIE";
+                title = "🚀 NIVEL ROOKIE 🚀";
+                description = "¡EMPEZANDO! Estás comenzando tu viaje en el mundo de la cultura automotriz. Hay mucho por descubrir sobre estas increíbles marcas y su fascinante historia. ¡Sigue aprendiendo y desarrolla tu pasión por los autos!";
+                color = "linear-gradient(135deg, #00ccff, #3399ff)";
+            }
+            
+            document.getElementById('resultContainer').innerHTML = `
+                <div class="result-card" style="background: ${color.replace('135deg', '135deg, rgba(0,0,0,0.1) 0%')}, linear-gradient(135deg, #2d2d2d, #1a1a1a);">
+                    <div class="score-display">${score}/${questions.length * 3}</div>
+                    <div class="level-title" style="color: #fff; text-shadow: 2px 2px 4px rgba(0,0,0,0.8);">${title}</div>
+                    <div style="color: #333; font-weight: bold; font-size: 1.8em; margin: 15px 0; text-transform: uppercase; letter-spacing: 1px;">${level}</div>
+                    <div class="level-description" style="color: #fff;">${description}</div>
+                    <button class="btn restart-btn" onclick="restartQuiz()">🔄 Intentar de Nuevo</button>
+                </div>
+            `;
+            
+            document.getElementById('resultContainer').style.display = 'block';
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            answers = [];
+            document.getElementById('resultContainer').style.display = 'none';
+            document.getElementById('quizContainer').style.display = 'block';
+            displayQuestion();
+        }
+
+        // Iniciar el quiz
+        displayQuestion();
+    </script>
+</body>
+</html>
